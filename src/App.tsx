@@ -14,7 +14,7 @@ export default function AnimatedFinanceBackground() {
   const [showControls, setShowControls] = useState(true);
 
   useEffect(() => {
-    let timeout;
+    let timeout: ReturnType<typeof setTimeout>;
 
     const onMove = () => {
       setShowControls(true);
@@ -77,8 +77,8 @@ export default function AnimatedFinanceBackground() {
           style={{
             backgroundImage: `url(${backgroundImage})`,
             opacity: backgroundOpacity,
-            mixBlendMode: blendMode,
-            filter: 'saturate(1.05) contrast(1.02)',
+mixBlendMode: blendMode as React.CSSProperties['mixBlendMode'],
+filter: 'saturate(1.05) contrast(1.02)',
           }}
         />
       )}
@@ -100,7 +100,7 @@ export default function AnimatedFinanceBackground() {
 
       {/* World dots */}
       <div className="absolute top-0 right-0 opacity-20 scale-110 pointer-events-none">
-        <svg width="800" height="300" viewBox="0 0 800 300">
+        <svg width="100%" height="300" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid slice">
           <g fill={accentColor}>
             {Array.from({ length: 500 }).map((_, i) => {
               const x = (i * 17) % 800;
@@ -228,7 +228,7 @@ export default function AnimatedFinanceBackground() {
       {/* Bitcoin watermark */}
       <div className="absolute bottom-10 left-10 opacity-[0.05] select-none pointer-events-none">
         <div
-          className="text-[240px] font-black"
+          className="text-[120px] md:text-[240px] font-black"
           style={{ color: accentColor }}
         >
           ₿
@@ -244,7 +244,7 @@ export default function AnimatedFinanceBackground() {
       <div
         className={`absolute top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${showControls ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'}`}
       >
-        <div className="backdrop-blur-xl bg-white/70 border border-black/10 rounded-3xl shadow-2xl px-5 py-4 flex flex-wrap gap-4 items-center max-w-[95vw]">
+        <div className="backdrop-blur-xl bg-white/70 border border-black/10 rounded-3xl shadow-2xl px-5 py-4 flex flex-wrap gap-4 items-center max-w-[95vw] max-h-[80vh] overflow-y-auto">
           <div className="flex flex-col text-xs">
             <label>Accent</label>
             <input
@@ -332,7 +332,8 @@ export default function AnimatedFinanceBackground() {
                 if (file) {
                   const reader = new FileReader();
                   reader.onload = (event) => {
-                    setBackgroundImage(event.target?.result || '');
+                   setBackgroundImage(event.target?.result as string || '');
+                  
                   };
                   reader.readAsDataURL(file);
                 }
@@ -372,11 +373,6 @@ export default function AnimatedFinanceBackground() {
             </select>
           </div>
         </div>
-      </div>
-
-      {/* Live label */}
-      <div className="absolute top-5 right-5 z-40 backdrop-blur-lg bg-black/70 text-white px-4 py-2 rounded-full text-sm tracking-wide shadow-lg border border-white/10">
-        LIVE • GLOBAL MARKETS
       </div>
 
       {/* Floating particles */}
