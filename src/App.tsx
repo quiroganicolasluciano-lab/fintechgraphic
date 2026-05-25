@@ -12,6 +12,7 @@ export default function AnimatedFinanceBackground() {
   const [waveFrequency, setWaveFrequency] = useState(1);
   const [animationSpeed, setAnimationSpeed] = useState(8);
   const [showControls, setShowControls] = useState(true);
+  const [showChart, setShowChart] = useState(true);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;
@@ -19,7 +20,6 @@ export default function AnimatedFinanceBackground() {
     const onMove = () => {
       setShowControls(true);
       clearTimeout(timeout);
-
       timeout = setTimeout(() => {
         setShowControls(false);
       }, 4000);
@@ -77,8 +77,8 @@ export default function AnimatedFinanceBackground() {
           style={{
             backgroundImage: `url(${backgroundImage})`,
             opacity: backgroundOpacity,
-mixBlendMode: blendMode as React.CSSProperties['mixBlendMode'],
-filter: 'saturate(1.05) contrast(1.02)',
+            mixBlendMode: blendMode as React.CSSProperties['mixBlendMode'],
+            filter: 'saturate(1.05) contrast(1.02)',
           }}
         />
       )}
@@ -181,49 +181,49 @@ filter: 'saturate(1.05) contrast(1.02)',
       </div>
 
       {/* Main chart */}
-      <div
-        className="absolute bottom-0 left-0 w-full overflow-hidden opacity-80 transition-all duration-700"
-        style={{ height: `${chartHeight}%` }}
-      >
-        <svg
-          viewBox="0 0 1920 500"
-          className="w-full h-full"
-          preserveAspectRatio="none"
+      {showChart && (
+        <div
+          className="absolute bottom-0 left-0 w-full overflow-hidden opacity-80 transition-all duration-700"
+          style={{ height: `${chartHeight}%` }}
         >
-          <defs>
-            <linearGradient id="mainGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={accentColor} stopOpacity="0.35" />
-              <stop offset="100%" stopColor={accentColor} stopOpacity="0" />
-            </linearGradient>
-          </defs>
+          <svg
+            viewBox="0 0 1920 500"
+            className="w-full h-full"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="mainGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={accentColor} stopOpacity="0.35" />
+                <stop offset="100%" stopColor={accentColor} stopOpacity="0" />
+              </linearGradient>
+            </defs>
 
-          <path
-            d={chartPath}
-            fill="none"
-            stroke={accentColor}
-            strokeWidth="4"
-            strokeLinecap="round"
-            style={{
-              filter: `drop-shadow(0 0 12px ${accentColor})`,
-            }}
-          />
+            <path
+              d={chartPath}
+              fill="none"
+              stroke={accentColor}
+              strokeWidth="4"
+              strokeLinecap="round"
+              style={{ filter: `drop-shadow(0 0 12px ${accentColor})` }}
+            />
 
-          <path
-            d={`${chartPath} L1920 500 L0 500 Z`}
-            fill="url(#mainGradient)"
-          />
+            <path
+              d={`${chartPath} L1920 500 L0 500 Z`}
+              fill="url(#mainGradient)"
+            />
 
-          {Array.from({ length: 10 }).map((_, i) => (
-            <circle key={i} r="5" fill={accentColor} opacity="0.85">
-              <animateMotion
-                dur={`${animationSpeed + i}s`}
-                repeatCount="indefinite"
-                path={chartPath}
-              />
-            </circle>
-          ))}
-        </svg>
-      </div>
+            {Array.from({ length: 10 }).map((_, i) => (
+              <circle key={i} r="5" fill={accentColor} opacity="0.85">
+                <animateMotion
+                  dur={`${animationSpeed + i}s`}
+                  repeatCount="indefinite"
+                  path={chartPath}
+                />
+              </circle>
+            ))}
+          </svg>
+        </div>
+      )}
 
       {/* Bitcoin watermark */}
       <div className="absolute bottom-10 left-10 opacity-[0.05] select-none pointer-events-none">
@@ -245,31 +245,20 @@ filter: 'saturate(1.05) contrast(1.02)',
         className={`absolute top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 ${showControls ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'}`}
       >
         <div className="backdrop-blur-xl bg-white/70 border border-black/10 rounded-3xl shadow-2xl px-5 py-4 flex flex-wrap gap-4 items-center max-w-[95vw] max-h-[80vh] overflow-y-auto">
+          
           <div className="flex flex-col text-xs">
             <label>Accent</label>
-            <input
-              type="color"
-              value={accentColor}
-              onChange={(e) => setAccentColor(e.target.value)}
-            />
+            <input type="color" value={accentColor} onChange={(e) => setAccentColor(e.target.value)} />
           </div>
 
           <div className="flex flex-col text-xs">
             <label>Background</label>
-            <input
-              type="color"
-              value={backgroundColor}
-              onChange={(e) => setBackgroundColor(e.target.value)}
-            />
+            <input type="color" value={backgroundColor} onChange={(e) => setBackgroundColor(e.target.value)} />
           </div>
 
           <div className="flex flex-col text-xs text-black">
             <label>Chart Style</label>
-            <select
-              value={chartStyle}
-              onChange={(e) => setChartStyle(e.target.value)}
-              className="rounded-lg px-2 py-1 bg-white border"
-            >
+            <select value={chartStyle} onChange={(e) => setChartStyle(e.target.value)} className="rounded-lg px-2 py-1 bg-white border">
               <option value="smooth">Smooth</option>
               <option value="volatile">Volatile</option>
               <option value="stairs">Stairs</option>
@@ -278,48 +267,22 @@ filter: 'saturate(1.05) contrast(1.02)',
 
           <div className="flex flex-col text-xs text-black min-w-[120px]">
             <label>Chart Height</label>
-            <input
-              type="range"
-              min="20"
-              max="90"
-              value={chartHeight}
-              onChange={(e) => setChartHeight(Number(e.target.value))}
-            />
+            <input type="range" min="20" max="90" value={chartHeight} onChange={(e) => setChartHeight(Number(e.target.value))} />
           </div>
 
           <div className="flex flex-col text-xs text-black min-w-[120px]">
             <label>Amplitude</label>
-            <input
-              type="range"
-              min="0.2"
-              max="3"
-              step="0.1"
-              value={waveAmplitude}
-              onChange={(e) => setWaveAmplitude(Number(e.target.value))}
-            />
+            <input type="range" min="0.2" max="3" step="0.1" value={waveAmplitude} onChange={(e) => setWaveAmplitude(Number(e.target.value))} />
           </div>
 
           <div className="flex flex-col text-xs text-black min-w-[120px]">
             <label>Frequency</label>
-            <input
-              type="range"
-              min="0.5"
-              max="2"
-              step="0.1"
-              value={waveFrequency}
-              onChange={(e) => setWaveFrequency(Number(e.target.value))}
-            />
+            <input type="range" min="0.5" max="2" step="0.1" value={waveFrequency} onChange={(e) => setWaveFrequency(Number(e.target.value))} />
           </div>
 
           <div className="flex flex-col text-xs text-black min-w-[120px]">
             <label>Speed</label>
-            <input
-              type="range"
-              min="2"
-              max="20"
-              value={animationSpeed}
-              onChange={(e) => setAnimationSpeed(Number(e.target.value))}
-            />
+            <input type="range" min="2" max="20" value={animationSpeed} onChange={(e) => setAnimationSpeed(Number(e.target.value))} />
           </div>
 
           <div className="flex flex-col text-xs text-black min-w-[140px]">
@@ -332,8 +295,7 @@ filter: 'saturate(1.05) contrast(1.02)',
                 if (file) {
                   const reader = new FileReader();
                   reader.onload = (event) => {
-                   setBackgroundImage(event.target?.result as string || '');
-                  
+                    setBackgroundImage(event.target?.result as string || '');
                   };
                   reader.readAsDataURL(file);
                 }
@@ -344,23 +306,12 @@ filter: 'saturate(1.05) contrast(1.02)',
 
           <div className="flex flex-col text-xs text-black min-w-[120px]">
             <label>BG Opacity</label>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.01"
-              value={backgroundOpacity}
-              onChange={(e) => setBackgroundOpacity(Number(e.target.value))}
-            />
+            <input type="range" min="0" max="1" step="0.01" value={backgroundOpacity} onChange={(e) => setBackgroundOpacity(Number(e.target.value))} />
           </div>
 
           <div className="flex flex-col text-xs text-black min-w-[140px]">
             <label>Blend Mode</label>
-            <select
-              value={blendMode}
-              onChange={(e) => setBlendMode(e.target.value)}
-              className="rounded-lg px-2 py-1 bg-white border"
-            >
+            <select value={blendMode} onChange={(e) => setBlendMode(e.target.value)} className="rounded-lg px-2 py-1 bg-white border">
               <option value="normal">Normal</option>
               <option value="multiply">Multiply</option>
               <option value="screen">Screen</option>
@@ -372,7 +323,28 @@ filter: 'saturate(1.05) contrast(1.02)',
               <option value="difference">Difference</option>
             </select>
           </div>
+
+          {/* BOTON TOGGLE */}
+          <div className="flex flex-col text-xs text-black">
+            <label>Chart</label>
+            <button
+              onClick={() => setShowChart(!showChart)}
+              className={`rounded-lg px-3 py-1 border text-xs font-medium transition-all ${
+                showChart
+                  ? 'bg-black text-white border-black'
+                  : 'bg-white text-black border-black/30'
+              }`}
+            >
+              {showChart ? 'Ocultar' : 'Mostrar'}
+            </button>
+          </div>
+
         </div>
+      </div>
+
+      {/* Live label */}
+      <div className="absolute top-5 right-3 z-40 backdrop-blur-lg bg-black/70 text-white px-4 py-2 rounded-full text-xs md:text-sm tracking-wide shadow-lg border border-white/10">
+        LIVE • GLOBAL MARKETS
       </div>
 
       {/* Floating particles */}
@@ -396,21 +368,12 @@ filter: 'saturate(1.05) contrast(1.02)',
 
       <style>{`
         @keyframes scan {
-          0% {
-            transform: translateX(-100%) rotate(12deg);
-          }
-          100% {
-            transform: translateX(500%) rotate(12deg);
-          }
+          0% { transform: translateX(-100%) rotate(12deg); }
+          100% { transform: translateX(500%) rotate(12deg); }
         }
-
         @keyframes dashFlow {
-          0% {
-            stroke-dashoffset: 400;
-          }
-          100% {
-            stroke-dashoffset: 0;
-          }
+          0% { stroke-dashoffset: 400; }
+          100% { stroke-dashoffset: 0; }
         }
       `}</style>
     </div>
