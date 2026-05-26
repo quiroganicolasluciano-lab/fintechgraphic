@@ -342,10 +342,10 @@ export default function AnimatedFinanceBackground() {
         </div>
       </div>
 
-      {/* Live label */}
+      {/* Live label 
       <div className="absolute top-5 right-3 z-40 backdrop-blur-lg bg-black/70 text-white px-4 py-2 rounded-full text-xs md:text-sm tracking-wide shadow-lg border border-white/10">
         LIVE • GLOBAL MARKETS
-      </div>
+      </div>*/}
 
       {/* Floating particles */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
